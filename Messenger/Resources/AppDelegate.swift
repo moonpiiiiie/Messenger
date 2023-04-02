@@ -15,7 +15,7 @@ import FBSDKCoreKit
 import GoogleSignIn
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func application(
@@ -29,10 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        GIDSignIn.sharedInstance()?.clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance()?.delegate = self
         
+        
+      
         return true
+        
     }
     
     func application(
@@ -46,6 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
             annotation: options[UIApplication.OpenURLOptionsKey.annotation]
         )
+        var handled: Bool
+
+        handled = GIDSignIn.sharedInstance.handle(url)
+        if handled {
+          return true
+        }
+
+        return false
     }
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -54,14 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        guard error == nil else {
-            if let error = error {
-                print("Failed to sign in with Google: \(error)")
-            }
-            return
-        }
-        
-    }
+
     
 }
